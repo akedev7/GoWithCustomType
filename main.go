@@ -11,10 +11,11 @@ func main() {
 	p := organization.NewPerson("James", "Wilson")
 	println(p.ID())
 	println(p.FullName())
-	err := p.SetTwitterHandler("@jame wil")
+	err := p.SetTwitterHandler("@jame_wil")
 	if err != nil {
 		fmt.Printf("An error occur setting twitter handler %s \n", err.Error())
 	}
 	println(p.TwitterHandler())
+	println(p.TwitterHandler().RedirectUrl())
 
 }
