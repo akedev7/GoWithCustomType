@@ -11,6 +11,27 @@ type Identifiable interface {
 }
 
 //Type declaration ( it copies the fields of a type over to a new type, so you can extend the method for yourself)(can refer to a struct as well)
+type socialSecurityNumber string
+
+//it will implement interface implcitly for you from Identifiable (if there are the same 2 methods, it will error during the conpliation)
+func (ssn socialSecurityNumber) ID() string {
+	return string(ssn)
+}
+
+func NewSocialSecurityNumber(value string) Identifiable {
+	return socialSecurityNumber(value)
+}
+
+type Name struct {
+	first string
+	last  string
+}
+
+func (n *Name) FullName() string {
+	return fmt.Sprintf("%s %s", n.first, n.last)
+}
+
+//Type declaration ( it copies the fields of a type over to a new type, so you can extend the method for yourself)(can refer to a struct as well)
 type TwitterHandler string
 
 func (th TwitterHandler) RedirectUrl() string {
@@ -18,25 +39,26 @@ func (th TwitterHandler) RedirectUrl() string {
 	return fmt.Sprintf("https://www.twitter.com/%s", cleanHandler)
 }
 
-type Person struct {
-	firstName      string
-	lastName       string
-	twitterHandler TwitterHandler
+type Employee struct {
+	Name
 }
 
-func NewPerson(firstName, lastName string) Person {
+type Person struct {
+	Name                          // Embbed struct (it's similar to "implement" in java but only fields, so the field become as a part of the object)
+	twitterHandler TwitterHandler //Composition
+	Identifiable                  // Embeded interface (it's similar to "implement" in java but only methods, so the method become as a part of the object)
+}
+
+func NewPerson(firstName, lastName string, identifiable Identifiable) Person {
 	return Person{
-		firstName: firstName,
-		lastName:  lastName,
+		Name:         Name{first: firstName, last: lastName},
+		Identifiable: identifiable,
 	}
 }
 
-func (p *Person) FullName() string {
-	return fmt.Sprintf("%s %s", p.firstName, p.lastName)
-}
-
 func (p *Person) ID() string {
-	return "123456"
+
+	return fmt.Sprintf("Person's Identifier: %s", p.Identifiable.ID())
 }
 
 // You need to make the pointer receiver to modify the object state ( you can have pointer for every method for consistency)

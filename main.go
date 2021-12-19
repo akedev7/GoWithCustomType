@@ -8,7 +8,7 @@ import (
 
 func main() {
 	//Custom data type
-	p := organization.NewPerson("James", "Wilson")
+	p := organization.NewPerson("James", "Wilson", organization.NewSocialSecurityNumber("123-5-6789"))
 	println(p.ID())
 	println(p.FullName())
 	err := p.SetTwitterHandler("@jame_wil")
